@@ -13,7 +13,7 @@ local function hsv_to_rgb(h, s, v, a)
 		elseif i == 4 then r, g, b = t, p, v
 		elseif i == 5 then r, g, b = v, p, q
 	end
-	return Vector4(math.floor(r * 255), math.floor(g * 255), math.floor(b * 255), math.floor(a * 255))
+	return {math.floor(r * 255), math.floor(g * 255), math.floor(b * 255), math.floor(a * 255)}
 end
 
 local spirit_framecount = 0
@@ -29,6 +29,7 @@ local position_history = {}
 for i = 0,129 do
     position_history[i] = Vector3(0,0,0)
 end
+
 function render_spirit()
     local position = Vector3(0,0,0)
     player.get_coordinates(player.index(), position)
@@ -79,7 +80,7 @@ function render_spirit()
     spirit_radius = radius
     spirit_color = hsv_to_rgb(system.ticks() % 5050 / 5050,1, 1, 1)
     if screenpos.x ~= 0 then
-        draw.set_color(0,spirit_color.r,spirit_color.g,spirit_color.b,spirit_color.a)
+        draw.set_color(0,spirit_color[1],spirit_color[2],spirit_color[3],spirit_color[4])
         draw.set_radius(radius - 10)
         draw.circle_filled(screenpos.x + 5, screenpos.y - 5)
         draw.set_radius(radius - 8)
@@ -91,6 +92,7 @@ function render_spirit()
 
     end
 end
+
 function OnFrame()
     if player.index() ~= -1 then
         render_spirit()
